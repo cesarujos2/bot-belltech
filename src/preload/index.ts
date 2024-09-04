@@ -1,8 +1,15 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  async getUniqueUnreviewedInteraction() {
+    return await ipcRenderer.invoke('unique-unreviewed-interaction')
+  },
+  async updateInteractionStatus(id: string, status: number) {
+    return await ipcRenderer.invoke('update-interaction-status', id, status)
+  }
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
