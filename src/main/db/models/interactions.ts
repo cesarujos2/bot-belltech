@@ -1,11 +1,12 @@
 // src/main/models/interactionsModel.ts
 import db from '../connection' // Importa tu módulo de conexión a la base de datos
 
-export type Status = -1 | 0 | 1
+export type Status = -1 | 0 | 1 | 2 //Error | Unreviewed | Done | Progress
 // Define la interfaz para los datos de interacción
 export interface Interaction {
   id: string
   status: Status
+  description: string
 }
 
 // Crea una función para insertar una nueva interacción

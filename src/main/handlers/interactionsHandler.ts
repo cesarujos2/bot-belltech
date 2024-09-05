@@ -8,6 +8,11 @@ export function InteractionsHandler() {
       ipcMain.handle('unique-unreviewed-interaction', async (_event) => {
         try {
           const interaction = await getUniqueUnreviewedInteraction()
+          if(interaction && interaction.id){
+            await updateInteractionStatus(interaction.id, 2, "")
+          } else{
+            throw new Error("No existen id disposibles!")
+          }
           return { success: true, data: [interaction] } as DBResponse
         } catch (error: any) {
           return { success: false, error: error.message } as DBResponse
