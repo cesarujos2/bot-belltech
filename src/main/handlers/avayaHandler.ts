@@ -13,12 +13,12 @@ export function avayaHandler() {
     },
     function saveWAV() {
       ipcMain.handle('save-wav', async (_event, id) => {
-        const { audioUrl } = await avaya.getAudioUrl(id)
-        if (audioUrl) {
+        const { success, audioUrl, error } = await avaya.getAudioUrl(id)
+        if (success && audioUrl) {
           const response = await downloadWavFile(audioUrl, `${id}.wav`)
           return response
         } else {
-          return { success: false, error: 'audioUrl no disponible en la respuesta' }
+          return { success: false, error: error ?? "No presenta URL" }
         }
       })
     }
