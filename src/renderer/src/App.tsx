@@ -1,10 +1,12 @@
 import { useState } from "react"
 import configIcon from './assets/config.svg'
+import Loading from "./components/Loading/Loading"
 
 function App(): JSX.Element {
   const [showConfig, setShowConfig] = useState<boolean>(false)
   const [logged, setLogged] = useState<{ success: boolean, error?: string }>({ success: false })
   const [state, setState] = useState<boolean>(false)
+  const [loading, setLoading] = useState(false);
 
   const handleState = async () => {
     setState(prev => !prev)
@@ -12,6 +14,7 @@ function App(): JSX.Element {
 
   const loginHandle = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setLoading(true)
     const formData = new FormData(event.currentTarget)
     const formObject = Object.fromEntries(formData) as { username: string, password: string };
 
@@ -23,12 +26,14 @@ function App(): JSX.Element {
         setLogged({ success: false, error: "Login failed. Try again." });
       } finally {
         setShowConfig(false);
+        setLoading(false)
       }
     }
   }
 
   return (
     <div>
+      {loading && <Loading />}
       <div className="icon-config" onClick={() => { setShowConfig(prev => !prev) }}>
         <img src={configIcon} alt="icon-config" />
       </div>
