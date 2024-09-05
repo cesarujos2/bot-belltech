@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import './db/connection'
 import { InteractionsHandler } from './handlers/interactionsHandler'
+import { avayaHandler } from './handlers/avayaHandler'
 
 function createWindow(): void {
   // Create the browser window.
@@ -53,6 +54,7 @@ app.whenReady().then(() => {
 
   // IPC test
   InteractionsHandler().map((x) => x())
+  avayaHandler().map((x) => x())
 
   createWindow()
 

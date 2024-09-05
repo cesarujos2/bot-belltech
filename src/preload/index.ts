@@ -8,6 +8,12 @@ const api = {
   },
   async updateInteractionStatus(id: string, status: number) {
     return await ipcRenderer.invoke('update-interaction-status', id, status)
+  },
+  async saveWAV(id: string) {
+    return await ipcRenderer.invoke('save-wav', id)
+  },
+  async login(username: string, password: string) {
+    return await ipcRenderer.invoke('login', username, password)
   }
 }
 
