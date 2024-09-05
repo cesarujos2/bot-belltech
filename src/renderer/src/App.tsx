@@ -5,17 +5,17 @@ import Interactions from "./components/Interactions/Interactions"
 
 function App(): JSX.Element {
   const [showConfig, setShowConfig] = useState<boolean>(false)
-  const [logged, setLogged] = useState<{ success: boolean, error?: string }>({ success: true })
+  const [logged, setLogged] = useState<{ success: boolean, error?: string }>({ success: false })
   const [state, setState] = useState<boolean>(false)
   const [loading, setLoading] = useState(false);
   const [lines, setLines] = useState<Array<string>>([])
   const isCancelled = useRef(false);
 
   const handleState = async () => {
-    if(state){
+    if (state) {
       isCancelled.current = true
       setState(false)
-    } else{
+    } else {
       isCancelled.current = false;
       setState(true);
       runRecursively();
@@ -24,12 +24,12 @@ function App(): JSX.Element {
 
   const runRecursively = useCallback(async () => {
     if (isCancelled.current) return;
-    
+
     const response = await saveAudio();
     setLines(prev => [...prev, response]);
-    
+
     if (isCancelled.current) return;
-    
+
     runRecursively();
   }, []);
 
@@ -82,7 +82,15 @@ function App(): JSX.Element {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", padding: "40px 20px", width: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        padding: "40px 20px",
+        width: "100%",
+        justifyContent: "center",
+      }}>
       {loading && <Loading />}
       <div className="icon-config" onClick={() => { setShowConfig(prev => !prev) }}>
         <img src={configIcon} alt="icon-config" />
@@ -109,7 +117,7 @@ function App(): JSX.Element {
         </div>
       )}
 
-      <div className="text">
+      <div className="text" style={{marginBottom: `${logged.success? "": "40px"}`}}>
         <span className="react">Decrypt</span>
         &nbsp;and <span className="ts">Download</span>
       </div>
@@ -124,7 +132,7 @@ function App(): JSX.Element {
           </div>
         </div>
       )}
-      <Interactions lines={lines}></Interactions>
+      {logged.success && (<Interactions lines={lines}></Interactions>)}
     </div>
   )
 }
