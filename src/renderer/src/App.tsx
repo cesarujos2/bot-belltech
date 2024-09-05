@@ -19,9 +19,10 @@ function App(): JSX.Element {
       try {
         const response = await window.api.login(formObject.username, formObject.password);
         setLogged(response);
-        setShowConfig(false);
       } catch (error) {
         setLogged({ success: false, error: "Login failed. Try again." });
+      } finally {
+        setShowConfig(false);
       }
     }
   }
@@ -34,12 +35,17 @@ function App(): JSX.Element {
       <div className="action" style={{ fontWeight: "800" }}>
         {!logged.success ? "NO LOGGED" : "LOGGED"}
       </div>
+      {logged.error && (
+        <div className="action" style={{ fontWeight: "600" }}>
+          {logged.error}
+        </div>
+      )}
       {showConfig && (
         <div className="config">
           <form onSubmit={loginHandle}>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <input type="text" placeholder="Username" name="username" required />
-              <input type="password" placeholder="Password" name="password" required/>
+              <input type="password" placeholder="Password" name="password" required />
             </div>
             <div style={{ padding: "20px 0", display: "flex", justifyContent: "center" }}>
               <button>Login</button>
