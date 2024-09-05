@@ -15,9 +15,9 @@ export function InteractionsHandler() {
       })
     },
     function updateInteractionStatusHandler(){
-      ipcMain.handle('update-interaction-status', async (_event, interactionId, status) =>{
+      ipcMain.handle('update-interaction-status', async (_event, interactionId, status, description) =>{
         try{
-          await updateInteractionStatus(interactionId, status)
+          await updateInteractionStatus(interactionId, status, description)
           return { succes: true }
         } catch(error: any){
           return { succes: false, error: error.message}

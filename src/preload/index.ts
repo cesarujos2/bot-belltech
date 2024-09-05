@@ -6,14 +6,14 @@ const api = {
   async getUniqueUnreviewedInteraction() {
     return await ipcRenderer.invoke('unique-unreviewed-interaction')
   },
-  async updateInteractionStatus(id: string, status: number) {
-    return await ipcRenderer.invoke('update-interaction-status', id, status)
-  },
   async saveWAV(id: string) {
     return await ipcRenderer.invoke('save-wav', id)
   },
   async login(username: string, password: string) {
     return await ipcRenderer.invoke('login', username, password)
+  },
+  async updateInteractionStatus(id: string, status: number, description: string) {
+    return await ipcRenderer.invoke('update-interaction-status', id, status, description)
   }
 }
 

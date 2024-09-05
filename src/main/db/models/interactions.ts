@@ -11,8 +11,8 @@ export interface Interaction {
 // Crea una función para insertar una nueva interacción
 export function insertInteraction(id: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const sql = 'INSERT INTO interactions (id, status) VALUES (?, ?)'
-    db.run(sql, [id, 0], function (err) {
+    const sql = 'INSERT INTO interactions (id, status, description) VALUES (?, ?, ?)'
+    db.run(sql, [id, 0, ''], function (err) {
       if (err) {
         reject(err)
       } else {
@@ -51,18 +51,24 @@ export function getInteractionById(id: string): Promise<Interaction | null> {
 }
 
 // Crea una función para actualizar el estado de una interacción
-export function updateInteractionStatus(id: string, status: number): Promise<void> {
+export function updateInteractionStatus(
+  id: string,
+  status: number,
+  description: string
+): Promise<void> {
   return new Promise((resolve, reject) => {
-    const sql = 'UPDATE interactions SET status = ? WHERE id = ?'
-    db.run(sql, [status, id], function (err) {
+    const sql = 'UPDATE interactions SET status = ?, description = ? WHERE id = ?';
+    db.run(sql, [status, description, id], function (err) {
       if (err) {
-        reject(err)
+        console.error('Error executing SQL:', err.message);
+        reject(err);
       } else {
-        resolve()
+        resolve();
       }
-    })
-  })
+    });
+  });
 }
+
 
 export function getUniqueUnreviewedInteraction(): Promise<Interaction | null> {
   return new Promise((resolve, reject) => {

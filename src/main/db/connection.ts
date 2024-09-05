@@ -20,9 +20,10 @@ const db = new sqlite3.Database(dbPath, (err) => {
 // Función para crear la tabla si no existe
 function createTableIfNotExists() {
     const createTableSQL = `
-        CREATE TABLE IF NOT EXISTS my_table (
+        CREATE TABLE IF NOT EXISTS interactions (
             id TEXT PRIMARY KEY,
-            status INTEGER
+            status INTEGER,
+            description TEXT
         )
     `;
     

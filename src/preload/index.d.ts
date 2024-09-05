@@ -7,9 +7,9 @@ declare global {
     electron: ElectronAPI
     api: {
       getUniqueUnreviewedInteraction: () => Promise<DBResponse>
-      updateInteractionStatus: (id: string, status: Status) => Promise<DBResponse>
       login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>
       saveWAV: (id: string) => Promise<{ success: boolean; error?: string }>
+      updateInteractionStatus: (id: string, status: Status, description: string) => Promise<DBResponse>
     }
   }
 }
