@@ -14,10 +14,15 @@ function App(): JSX.Element {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const formObject = Object.fromEntries(formData) as { username: string, password: string };
-    if (formObject.username && formObject.password && formObject.username.length > 0 && formObject.password.length > 0) {
-      const response = await window.api.login(formObject.username, formObject.password)
-      setLogged(response)
-      setShowConfig(false)
+
+    if (formObject.username && formObject.password) {
+      try {
+        const response = await window.api.login(formObject.username, formObject.password);
+        setLogged(response);
+        setShowConfig(false);
+      } catch (error) {
+        setLogged({ success: false, error: "Login failed. Try again." });
+      }
     }
   }
 
@@ -33,8 +38,8 @@ function App(): JSX.Element {
         <div className="config">
           <form onSubmit={loginHandle}>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <input type="text" placeholder="Username" name="username" />
-              <input type="password" placeholder="Password" name="password" />
+              <input type="text" placeholder="Username" name="username" required />
+              <input type="password" placeholder="Password" name="password" required/>
             </div>
             <div style={{ padding: "20px 0", display: "flex", justifyContent: "center" }}>
               <button>Login</button>
