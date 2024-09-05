@@ -9,8 +9,10 @@ import { avayaHandler } from './handlers/avayaHandler'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 400,
+    height: 470,
+    minWidth: 400,
+    minHeight: 470,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
