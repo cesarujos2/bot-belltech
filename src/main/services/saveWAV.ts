@@ -24,6 +24,6 @@ export async function downloadWavFile(
     fs.writeFileSync(savePath, response.data)
     return { success: true }
   } catch (error: any) {
-    return { success: false, error: error.message }
+    return { success: false, error: "ERROR - SAVE WAV - " + error.message }
   }
 }

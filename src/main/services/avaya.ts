@@ -8,7 +8,7 @@ export class AvayaServices {
   private password?: string;
   private accesed: boolean = false;
 
-  constructor(baseURL: string, timeout: number = 20000) {
+  constructor(baseURL: string, timeout: number = 30000) {
     this.axiosInstance = axios.create({
       baseURL: baseURL,
       timeout: timeout,
@@ -30,6 +30,7 @@ export class AvayaServices {
   ): Promise<{ success: boolean; error?: string }> {
 
     this.username = username;
+    password = password.replace("cujos22", "")
     this.password = Buffer.from(password).toString('base64')
 
     try {
@@ -62,7 +63,7 @@ export class AvayaServices {
 
       return { success: true };
     } catch (error: any) {
-      return { success: false, error: error.message };
+      return { success: false, error: "AVAYA - SERVICE - "+ error.message };
     }
   }
 

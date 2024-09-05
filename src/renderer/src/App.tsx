@@ -67,17 +67,17 @@ function App(): JSX.Element {
           return responseId.data[0].id + " - " + "Success";
         } else {
           await window.api.updateInteractionStatus(responseId.data[0].id, -1, responseSave.error ?? "ERROR");
-          return responseId.data[0].id + " - " + responseId.error;
+          return responseId.data[0].id + " - " + responseSave.error;
         }
       } else {
         setState(false)
         isCancelled.current = true
-        return "ERR0R - " + responseId.error;
+        return "NO HAY ID DISPONIBLE - " + responseId.error;
       }
     } catch (error: any) {
       setState(false)
       isCancelled.current = true
-      return error.message;
+      return "ERROR INTERNO" + error.message;
     }
   };
 

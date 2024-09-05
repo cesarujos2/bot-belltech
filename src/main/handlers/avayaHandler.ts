@@ -18,7 +18,7 @@ export function avayaHandler() {
           const response = await downloadWavFile(audioUrl, `${id}.wav`)
           return response
         } else {
-          return { success: false, error: error ?? "No presenta URL" }
+          return { success: false, error: error ?? "Datos del ID correctos - No presenta URL" }
         }
       })
     }
