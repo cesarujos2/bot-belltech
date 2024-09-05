@@ -1,16 +1,38 @@
-import { useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import configIcon from './assets/config.svg'
 import Loading from "./components/Loading/Loading"
+import Interactions from "./components/Interactions/Interactions"
 
 function App(): JSX.Element {
   const [showConfig, setShowConfig] = useState<boolean>(false)
-  const [logged, setLogged] = useState<{ success: boolean, error?: string }>({ success: false })
+  const [logged, setLogged] = useState<{ success: boolean, error?: string }>({ success: true })
   const [state, setState] = useState<boolean>(false)
   const [loading, setLoading] = useState(false);
+  const [lines, setLines] = useState<Array<string>>([])
+  const isCancelled = useRef(false);
 
   const handleState = async () => {
-    setState(prev => !prev)
+    if(state){
+      isCancelled.current = true
+      setState(false)
+    } else{
+      isCancelled.current = false;
+      setState(true);
+      runRecursively();
+    }
   }
+
+  const runRecursively = useCallback(async () => {
+    if (isCancelled.current) return;
+    
+    const response = await saveAudio();
+    setLines(prev => [...prev, response]);
+    
+    if (isCancelled.current) return;
+    
+    runRecursively();
+  }, []);
+
 
   const loginHandle = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -31,8 +53,36 @@ function App(): JSX.Element {
     }
   }
 
+  const saveAudio = async () => {
+    try {
+      const responseId = await window.api.getUniqueUnreviewedInteraction();
+      if (responseId
+        && responseId.success
+        && responseId.data
+        && responseId.data.length > 0
+        && responseId.data[0].id) {
+        const responseSave = await window.api.saveWAV(responseId.data[0].id);
+        if (responseSave.success) {
+          await window.api.updateInteractionStatus(responseId.data[0].id, 1, "Audio guardado");
+          return responseId.data[0].id + " - " + "Success";
+        } else {
+          await window.api.updateInteractionStatus(responseId.data[0].id, -1, responseSave.error ?? "ERROR");
+          return responseId.data[0].id + " - " + responseId.error;
+        }
+      } else {
+        setState(false)
+        isCancelled.current = true
+        return "ERR0R - " + responseId.error;
+      }
+    } catch (error: any) {
+      setState(false)
+      isCancelled.current = true
+      return error.message;
+    }
+  };
+
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", padding: "40px 20px", width: "100%" }}>
       {loading && <Loading />}
       <div className="icon-config" onClick={() => { setShowConfig(prev => !prev) }}>
         <img src={configIcon} alt="icon-config" />
@@ -74,6 +124,7 @@ function App(): JSX.Element {
           </div>
         </div>
       )}
+      <Interactions lines={lines}></Interactions>
     </div>
   )
 }
