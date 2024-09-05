@@ -1,8 +1,9 @@
 import axios from 'axios'
+import { app } from 'electron'
 import fs from 'fs'
 import path from 'path'
 
-const saveDir = path.join(__dirname, 'downloads') // Carpeta donde guardar el archivo
+const saveDir = path.join(app.getPath('desktop'), '/Audios') // Carpeta donde guardar el archivo
 
 if (!fs.existsSync(saveDir)) {
   fs.mkdirSync(saveDir, { recursive: true })
