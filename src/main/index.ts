@@ -13,8 +13,6 @@ function createWindow(): void {
     height: 470,
     minWidth: 400,
     minHeight: 470,
-    maxHeight: 470,
-    maxWidth: 400,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
