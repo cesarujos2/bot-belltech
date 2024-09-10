@@ -8,7 +8,7 @@ export class AvayaServices {
   private password?: string;
   private accesed: boolean = false;
 
-  constructor(baseURL: string, timeout: number = 30000) {
+  constructor(baseURL: string, timeout: number = 60000) {
     this.axiosInstance = axios.create({
       baseURL: baseURL,
       timeout: timeout,

@@ -13,12 +13,16 @@ export function avayaHandler() {
     },
     function saveWAV() {
       ipcMain.handle('save-wav', async (_event, id) => {
-        const { success, audioUrl, error } = await avaya.getAudioUrl(id)
-        if (success && audioUrl) {
-          const response = await downloadWavFile(audioUrl, `${id}.wav`)
-          return response
-        } else {
-          return { success: false, error: error ?? "Datos del ID correctos - No presenta URL" }
+        try {
+          const { success, audioUrl, error } = await avaya.getAudioUrl(id)
+          if (success && audioUrl) {
+            const response = await downloadWavFile(audioUrl, `${id}.wav`)
+            return response
+          } else {
+            return { success: false, error: error ?? 'Datos del ID correctos - No presenta URL' }
+          }
+        } catch (err: any) {
+          return { success: false, error: err.message }
         }
       })
     }
