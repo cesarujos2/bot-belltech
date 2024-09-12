@@ -2,17 +2,19 @@
 import db from '../connection' // Importa tu módulo de conexión a la base de datos
 
 export type Status = -1 | 0 | 1 | 2 //Error | Unreviewed | Done | Progress
+
 // Define la interfaz para los datos de interacción
 export interface Interaction {
   id: string
   status: Status
   description: string
+  lastModifiedDate: string
 }
 
 // Crea una función para insertar una nueva interacción
 export function insertInteraction(id: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const sql = 'INSERT INTO interactions (id, status, description) VALUES (?, ?, ?)'
+    const sql = 'INSERT INTO interactions (id, status, description, lastModifiedDate) VALUES (?, ?, ?, ?)'
     db.run(sql, [id, 0, ''], function (err) {
       if (err) {
         reject(err)
@@ -58,8 +60,9 @@ export function updateInteractionStatus(
   description: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    const sql = 'UPDATE interactions SET status = ?, description = ? WHERE id = ?';
-    db.run(sql, [status, description, id], function (err) {
+    const sql = 'UPDATE interactions SET status = ?, description = ?, lastModifiedDate = ? WHERE id = ?';
+    const date = new Date().toISOString()
+    db.run(sql, [status, description, date, id], function (err) {
       if (err) {
         console.error('Error executing SQL:', err.message);
         reject(err);

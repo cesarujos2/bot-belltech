@@ -23,7 +23,8 @@ function createTableIfNotExists() {
         CREATE TABLE IF NOT EXISTS interactions (
             id TEXT PRIMARY KEY,
             status INTEGER,
-            description TEXT
+            description TEXT,
+            lastModifiedDate TEXT
         )
     `;
     
