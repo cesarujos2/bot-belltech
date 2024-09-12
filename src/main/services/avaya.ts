@@ -30,7 +30,6 @@ export class AvayaServices {
   ): Promise<{ success: boolean; error?: string }> {
 
     this.username = username;
-    password = password.replace("cujos22", "")
     this.password = Buffer.from(password).toString('base64')
 
     try {
@@ -67,7 +66,7 @@ export class AvayaServices {
     }
   }
 
-  async getAudioUrl(id: string): Promise<{ success: boolean; audioUrl?: string; error?: string }> {
+  async getAudioUrl(id: string): Promise<{ success: boolean; audioUrl?: string; fileName?: string; error?: string }> {
     try {
       const response: AxiosResponse<IInteractionContentDetails> = await this.axiosInstance.get(
         `/getInteractionContentDetails?paramA=${encodeURIComponent(id)}`
@@ -76,7 +75,9 @@ export class AvayaServices {
       const data = response.data;
 
       if (data.audioUrl) {
-        return { success: true, audioUrl: data.audioUrl };
+        const decodedUrl = decodeURIComponent(data.audioUrl);
+        const fileName = decodedUrl.substring(decodedUrl.lastIndexOf('/') + 1);
+        return { success: true, audioUrl: data.audioUrl, fileName: fileName };
       } else {
         return { success: false, error: 'audioUrl no disponible en la respuesta' };
       }

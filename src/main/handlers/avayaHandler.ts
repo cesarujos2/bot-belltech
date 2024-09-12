@@ -14,9 +14,9 @@ export function avayaHandler() {
     function saveWAV() {
       ipcMain.handle('save-wav', async (_event, id) => {
         try {
-          const { success, audioUrl, error } = await avaya.getAudioUrl(id)
+          const { success, audioUrl, error, fileName } = await avaya.getAudioUrl(id)
           if (success && audioUrl) {
-            const response = await downloadWavFile(audioUrl, `${id}.wav`)
+            const response = await downloadWavFile(audioUrl, `${fileName}`)
             return response
           } else {
             return { success: false, error: error ?? 'Datos del ID correctos - No presenta URL' }
