@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react"
 import configIcon from './assets/config.svg'
 import Loading from "./components/Loading/Loading"
 import Interactions from "./components/Interactions/Interactions"
+import Login from "./components/Login/Login"
 
 function App(): JSX.Element {
   const [showConfig, setShowConfig] = useState<boolean>(false)
@@ -82,6 +83,7 @@ function App(): JSX.Element {
   };
 
   return (
+    <Login>
     <div
       style={{
         display: "flex",
@@ -134,6 +136,7 @@ function App(): JSX.Element {
       )}
       {logged.success && (<Interactions lines={lines}></Interactions>)}
     </div>
+    </Login>
   )
 }
 
