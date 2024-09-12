@@ -14,6 +14,9 @@ const api = {
   },
   async updateInteractionStatus(id: string, status: number, description: string) {
     return await ipcRenderer.invoke('update-interaction-status', id, status, description)
+  },
+  async auth(password: string) {
+    return await ipcRenderer.invoke('launch', password)
   }
 }
 

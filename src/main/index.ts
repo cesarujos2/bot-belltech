@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import './db/connection'
 import { InteractionsHandler } from './handlers/interactionsHandler'
 import { avayaHandler } from './handlers/avayaHandler'
+import { authHandler } from './handlers/authHandler'
 
 function createWindow(): void {
   // Create the browser window.
@@ -59,6 +60,7 @@ app.whenReady().then(() => {
   // IPC test
   InteractionsHandler().map((x) => x())
   avayaHandler().map((x) => x())
+  authHandler()
 
   createWindow()
 
