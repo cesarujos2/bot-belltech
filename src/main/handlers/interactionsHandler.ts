@@ -1,6 +1,7 @@
 // src/main/ipc/insertInteractionHandle.ts
 import { ipcMain } from 'electron' // Asegúrate de que la ruta sea correcta
 import { getUniqueUnreviewedInteraction, Interaction, updateInteractionStatus } from '../db/models/interactions'
+import { logErrorToFile } from '../services/logErrorToFile'
 
 export function InteractionsHandler() {
   return [
@@ -15,6 +16,7 @@ export function InteractionsHandler() {
           }
           return { success: true, data: [interaction] } as DBResponse
         } catch (error: any) {
+          logErrorToFile(error.message ?? "Error desconocido")
           return { success: false, error: error.message } as DBResponse
         }
       })
@@ -25,6 +27,7 @@ export function InteractionsHandler() {
           await updateInteractionStatus(interactionId, status, description)
           return { succes: true }
         } catch(error: any){
+          logErrorToFile(error.message ?? "Error desconocido")
           return { succes: false, error: error.message}
         }
       })
