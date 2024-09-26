@@ -30,9 +30,19 @@ const Login: React.FC<MyComponentProps> = ({ children }) => {
     };
 
     return (
-        <div>
+        <div style={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+        }}>
             {isLogged.success ? (
-                <div>{children}</div>
+                <div style={{
+                    height: "100%",
+                    width: "100%",
+                }}
+                >{children}</div>
             ) : (
                 <form onSubmit={LaunchHandle}>
                     <input
