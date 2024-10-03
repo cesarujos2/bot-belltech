@@ -74,7 +74,7 @@ export class AvayaServices {
 
       const data = response.data;
 
-      if (data.audioUrl) {
+      if (data.audioUrl && isValidUrl(data.audioUrl)) {
         const decodedUrl = decodeURIComponent(data.audioUrl);
         const fileName = decodedUrl.substring(decodedUrl.lastIndexOf('/') + 1);
         return { success: true, audioUrl: data.audioUrl, fileName: fileName };
@@ -97,6 +97,15 @@ export class AvayaServices {
         error: `Status: ${statusCode || 'Desconocido'}, Message: ${errorMsg}`,
       };
     }
+  }
+}
+
+function isValidUrl(urlString: string): boolean {
+  try {
+    new URL(urlString);
+    return true;
+  } catch (e) {
+    return false;
   }
 }
 

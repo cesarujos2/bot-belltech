@@ -2,7 +2,8 @@ import axios, { AxiosError } from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const baseDir = 'X:/'; 
+const drive = import.meta.env.MAIN_VITE_DRIVE ?? "R"
+const baseDir = drive + ':/'; 
 
 export async function downloadWavFile(
   url: string,
