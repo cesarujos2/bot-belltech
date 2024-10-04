@@ -11,6 +11,8 @@ declare global {
       saveWAV: (id: string) => Promise<{ success: boolean; error?: string }>
       updateInteractionStatus: (id: string, status: Status, description: string) => Promise<DBResponse>
       auth: (password: string) => Promise<boolean>
+      getDrivesList: () => Promise<string[]>
+      setDrive: (drive: string) => Promise<{ success: boolean, message: string }>
     }
   }
 }

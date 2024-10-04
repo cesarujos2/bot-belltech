@@ -2,8 +2,9 @@ import axios, { AxiosError } from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const drive = import.meta.env.MAIN_VITE_DRIVE ?? "R"
-const baseDir = drive + ':/'; 
+export const configDir = {
+  baseDir: 'R:/'
+};
 
 export async function downloadWavFile(
   url: string,
@@ -20,7 +21,7 @@ export async function downloadWavFile(
     const month = dateStr.slice(0, 2);
     const day = dateStr.slice(2, 4); 
 
-    const saveDir = path.join(baseDir, year, month, day);
+    const saveDir = path.join(configDir.baseDir, year, month, day);
     
     if (!fs.existsSync(saveDir)) {
       fs.mkdirSync(saveDir, { recursive: true });

@@ -17,6 +17,12 @@ const api = {
   },
   async auth(password: string) {
     return await ipcRenderer.invoke('launch', password)
+  },
+  async getDrivesList() {
+    return await ipcRenderer.invoke('get-drives')
+  },
+  async setDrive(drive: string) {
+    return await ipcRenderer.invoke('set-drive', drive)
   }
 }
 
