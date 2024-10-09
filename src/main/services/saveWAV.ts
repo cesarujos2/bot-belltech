@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import fs from 'fs';
+import fs from 'fs/promises'; // Usamos fs.promises
 import path from 'path';
 
 export const configDir = {
@@ -23,21 +23,26 @@ export async function downloadWavFile(
 
     const saveDir = path.join(configDir.baseDir, year, month, day);
     
-    if (!fs.existsSync(saveDir)) {
-      fs.mkdirSync(saveDir, { recursive: true });
+    try {
+      await fs.mkdir(saveDir, { recursive: true });
+    } catch (mkdirError: any) {
+      return { success: false, error: `Error al crear el directorio: ${mkdirError.message}` };
     }
 
     const savePath = path.join(saveDir, fileName);
-    
-    if (fs.existsSync(savePath)) {
+
+    try {
+      await fs.access(savePath);
       return { success: false, error: 'El archivo ya existe en la ubicación' };
+    } catch {
+      // Si no existe, continúa con la descarga y guardado
     }
 
     const response = await axios.get(url, {
       responseType: 'arraybuffer'
     });
 
-    fs.writeFileSync(savePath, response.data);
+    await fs.writeFile(savePath, response.data);
     return { success: true };
     
   } catch (error: unknown) {
@@ -50,7 +55,6 @@ export async function downloadWavFile(
         return { success: false, error: `ERROR - ${error.message}` };
       }
     } else {
-      // Otros errores no relacionados con Axios
       return { success: false, error: `ERROR - SAVE WAV - ${error instanceof Error ? error.message : 'Error desconocido'}` };
     }
   }
