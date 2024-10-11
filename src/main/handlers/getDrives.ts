@@ -9,7 +9,7 @@ export const drivesHandler = () => {
       ipcMain.handle('get-drives', async (_event) => {
         const response = await getDrives()
         if (!response || response.length == 0)
-          logErrorToFile('No se pudo cargar los discos montados.')
+          logErrorToFile('DRIVES HANDLER: No se pudo cargar los discos montados.')
         return response
       })
     },
@@ -19,7 +19,8 @@ export const drivesHandler = () => {
           configDir.baseDir = drive + "/"
           return { success: true, message: "Disco asignado: " + configDir.baseDir  }
         } catch (error: any) {
-          return { success: false, message: error.message }
+          logErrorToFile('DRIVES HANDLER: '+ error.message)
+          return { success: false, message: "DRIVES HANDLER: " + error.message }
         }
       })
     }
