@@ -98,6 +98,17 @@ export class AvayaServices {
       };
     }
   }
+
+  setNewBaseURL(baseURL: string, timeout: number = 300000){
+    this.axiosInstance = axios.create({
+      baseURL: baseURL,
+      timeout: timeout,
+      headers: { 
+        'Accept': 'application/json, text/javascript, */*; q=0.01', 
+        'Content-Type': 'text/json'
+      },
+    });
+  }
 }
 
 function isValidUrl(urlString: string): boolean {

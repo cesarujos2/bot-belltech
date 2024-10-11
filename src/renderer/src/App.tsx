@@ -12,7 +12,8 @@ function App(): JSX.Element {
   const [lines, setLines] = useState<Array<string>>([])
   const isCancelled = useRef(false);
   const [drives, setDrives] = useState<Array<string>>([])
-  const [selectedDrive, setSelectedDrive] = useState<string | null>(null)
+  const [config, setConfig] = useState<{ username: string, password: string, drive: string, baseURL: string } | null>(null)
+  const LIST_URL_AVAYA = ["172.30.147.17", "172.30.147.18"]
 
   const handleState = async () => {
     if (state) {
@@ -50,16 +51,18 @@ function App(): JSX.Element {
     event.preventDefault()
     setLoading(true)
     const formData = new FormData(event.currentTarget)
-    const formObject = Object.fromEntries(formData) as { username: string, password: string, drive: string };
+    const formObject = Object.fromEntries(formData) as { username: string, password: string, drive: string, baseURL: string };
 
     if (formObject.username && formObject.password && formObject.drive) {
       try {
-        const response = await window.api.login(formObject.username, formObject.password);
+        const urlSelected = "https://" + formObject.baseURL + "/webapp"
+        const response = await window.api.login(formObject.username, formObject.password, urlSelected);
         if (response.success) {
-          const responseDrive = await window.api.setDrive(formObject.drive)
-          setSelectedDrive(responseDrive.message)
+          await window.api.setDrive(formObject.drive)
+          setConfig(formObject);
+
         } else {
-          setSelectedDrive(null)
+          setConfig(null);
         }
         setLogged(response);
       } catch (error) {
@@ -122,10 +125,13 @@ function App(): JSX.Element {
             {logged.error}
           </div>
         )}
-        {selectedDrive && (
-          <div className="action" style={{ fontWeight: "600" }}>
-            {selectedDrive}
-          </div>
+        {config && (
+          <>
+            <div className="action" style={{ fontWeight: "600" }}>
+             {`${config.baseURL}/DRIVE: ${config.drive}/${config.username} `}
+            </div>
+          </>
+
         )}
         {showConfig && (
           <div className="config">
@@ -133,6 +139,36 @@ function App(): JSX.Element {
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <input type="text" placeholder="Username" name="username" required />
                 <input type="password" placeholder="Password" name="password" required />
+                <select
+                  name="baseURL"
+                  id="baseURL"
+                  style={{
+                    width: '100%',
+                    padding: '8px 16px',
+                    border: '1px solid #444',
+                    borderRadius: '8px',
+                    backgroundColor: '#1a1a1a',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.6)',
+                    color: '#fff',
+                    fontSize: '16px',
+                    transition: 'border 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    outline: 'none',
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.border = '1px solid #0070f3';
+                    e.target.style.boxShadow = '0px 0px 0px 4px rgba(0, 112, 243, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.border = '1px solid #444';
+                    e.target.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.6)';
+                  }}
+                >
+                  {LIST_URL_AVAYA.map((x) => (
+                    <option key={x} value={x} style={{ color: '#fff', backgroundColor: '#333' }}>
+                      {x}
+                    </option>
+                  ))}
+                </select>
                 <select
                   name="drive"
                   id="drive"
