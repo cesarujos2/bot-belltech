@@ -8,7 +8,7 @@ export class AvayaServices {
   private password?: string;
   private accesed: boolean = false;
 
-  constructor(baseURL: string, timeout: number = 60000) {
+  constructor(baseURL: string, timeout: number = 300000) {
     this.axiosInstance = axios.create({
       baseURL: baseURL,
       timeout: timeout,
@@ -79,7 +79,7 @@ export class AvayaServices {
         const fileName = decodedUrl.substring(decodedUrl.lastIndexOf('/') + 1);
         return { success: true, audioUrl: data.audioUrl, fileName: fileName };
       } else {
-        return { success: false, error: 'audioUrl no disponible en la respuesta' };
+        return { success: false, error: 'ERROR EN LA SOLICITUD A AVAYA - Audio no disponible en la respuesta' };
       }
     } catch (error: any) {
       let errorMsg = error.response?.data?.message || error.message || 'Error desconocido';

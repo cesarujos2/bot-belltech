@@ -28,6 +28,7 @@ function Interactions({ lines }: InteractionsProps) {
         overflowY: "scroll",
         overflowX: "hidden",
         maxHeight: "400px", // Ajusta la altura según sea necesario
+        userSelect: "text"
       }}
     >
       {lines.map((line, index) => (

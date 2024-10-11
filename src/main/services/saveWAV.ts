@@ -48,11 +48,11 @@ export async function downloadWavFile(
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        return { success: false, error: `ERROR - Descarga fallida: ${error.response.status} ${error.response.statusText}` };
+        return { success: false, error: `ERROR EN LA SOLICITUD A AVAYA - Descarga fallida: ${error.response.status} ${error.response.statusText} - AUDIO: ¨${url}` };
       } else if (error.request) {
-        return { success: false, error: 'ERROR - No se recibió respuesta del servidor.' };
+        return { success: false, error: 'ERROR EN LA SOLICITUD A AVAYA - No se recibió respuesta del servidor.' };
       } else {
-        return { success: false, error: `ERROR - ${error.message}` };
+        return { success: false, error: `ERROR EN LA SOLICITUD A AVAYA- ${error.message}` };
       }
     } else {
       return { success: false, error: `ERROR - SAVE WAV - ${error instanceof Error ? error.message : 'Error desconocido'}` };

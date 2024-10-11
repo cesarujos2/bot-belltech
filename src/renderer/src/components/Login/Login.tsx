@@ -10,7 +10,7 @@ interface ILaunch {
 }
 
 const Login: React.FC<MyComponentProps> = ({ children }) => {
-    const [isLogged, setIsLogged] = useState<ILaunch>({ success: false });
+    const [isLogged, setIsLogged] = useState<ILaunch>({ success: true });
 
     const LaunchHandle = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
