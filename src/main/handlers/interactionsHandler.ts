@@ -12,12 +12,12 @@ export function InteractionsHandler() {
           if(interaction && interaction.id){
             await updateInteractionStatus(interaction.id, 2, "")
           } else{
-            throw new Error("No existen id disposibles!")
+            throw new Error("DB HANDLER: No existen id disposibles!")
           }
           return { success: true, data: [interaction] } as DBResponse
         } catch (error: any) {
-          logErrorToFile(error.message ?? "Error desconocido")
-          return { success: false, error: error.message } as DBResponse
+          logErrorToFile(error.message ?? "DB HANDLER: Error desconocido al obtener status unreviewed")
+          return { success: false, error: "DB HANDLER: INTERACTIONS HANDLER" + error.message } as DBResponse
         }
       })
     },
@@ -27,8 +27,8 @@ export function InteractionsHandler() {
           await updateInteractionStatus(interactionId, status, description)
           return { succes: true }
         } catch(error: any){
-          logErrorToFile(error.message ?? "Error desconocido")
-          return { succes: false, error: error.message}
+          logErrorToFile(error.message ?? "DB HANDLER: Error desconocido al actualizar status")
+          return { succes: false, error: "DB HANDLER: " + error.message}
         }
       })
     }

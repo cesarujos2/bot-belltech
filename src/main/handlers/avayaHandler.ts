@@ -11,7 +11,7 @@ export function avayaHandler() {
       ipcMain.handle('login', async (_event, username, password, baseURL) => {
         avaya.setNewBaseURL(baseURL)
         const response = await avaya.login(username, password)
-        if(!response.success) logErrorToFile(response.error ?? "Datos del ID correctos - No presenta URL para descarga")
+        if(!response.success) logErrorToFile(response.error ?? "AVAYA HANDLER: Error desconocido")
         return response 
       })
     },
@@ -21,15 +21,15 @@ export function avayaHandler() {
           const { success, audioUrl, error, fileName } = await avaya.getAudioUrl(id)
           if (success && audioUrl) {
             const response = await downloadWavFile(audioUrl, `${fileName}`)
-            if(!response.success) logErrorToFile(response.error ?? "Obtención de audio Correcto") 
+            if(!response.success) logErrorToFile(response.error ?? "AVAYA HANDLER: Obtención de audio Correcto") 
             return response
           } else {
-            logErrorToFile(error ?? "Datos del ID correctos - No presenta URL para descarga")
-            return { success: false, error: error ?? 'Datos del ID correctos - No presenta URL' }
+            logErrorToFile(error ?? "AVAYA HANDLER: Datos del ID correctos - No presenta URL para descarga")
+            return { success: false, error: error ?? 'AVAYA HANDLER: Datos del ID correctos - No presenta URL' }
           }
         } catch (err: any) {
           logErrorToFile(err ?? "")
-          return { success: false, error: err.message }
+          return { success: false, error: "AVAYA HANDLER: " + err.message }
         }
       })
     }

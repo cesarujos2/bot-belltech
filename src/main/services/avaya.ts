@@ -40,7 +40,7 @@ export class AvayaServices {
       const data = response.data;
 
       if (response.status == 401 && data.code == '5555') {
-        return { success: false, error: 'Credenciales incorrectas' };
+        return { success: false, error: 'AVAYA SERVICES: Credenciales incorrectas' };
       }
 
       if (
@@ -55,14 +55,14 @@ export class AvayaServices {
       if (data.authToken && data.authToken.length > 0 && data.code == '2000') {
         this.setHeader("authToken", data.authToken)
       } else {
-        return { success: false, error: 'No ha iniciado sesión correctamente' };
+        return { success: false, error: 'SERVICES AVAYA: No ha iniciado sesión correctamente' };
       }
 
       this.accesed = true;
 
       return { success: true };
     } catch (error: any) {
-      return { success: false, error: "AVAYA - SERVICE - "+ error.message };
+      return { success: false, error: "SERVICES AVAYA: "+ error.message };
     }
   }
 
@@ -79,13 +79,13 @@ export class AvayaServices {
         const fileName = decodedUrl.substring(decodedUrl.lastIndexOf('/') + 1);
         return { success: true, audioUrl: data.audioUrl, fileName: fileName };
       } else {
-        return { success: false, error: 'ERROR EN LA SOLICITUD A AVAYA - Audio no disponible en la respuesta' };
+        return { success: false, error: 'SERVICES AVAYA: Audio no disponible en la respuesta' };
       }
     } catch (error: any) {
       let errorMsg = error.response?.data?.message || error.message || 'Error desconocido';
       const statusCode = error.response?.status;
 
-      if(!this.username || !this.password) errorMsg = "No se ha iniciado sesion previamente"
+      if(!this.username || !this.password) errorMsg = "SERVICES AVAYA: No se ha iniciado sesion previamente"
 
       if(statusCode == 401 && this.accesed && this.username && this.password){
         await this.login(this.username, this.password)
@@ -94,7 +94,7 @@ export class AvayaServices {
 
       return {
         success: false,
-        error: `Status: ${statusCode || 'Desconocido'}, Message: ${errorMsg}`,
+        error: `SERVICES AVAYA: Status ${statusCode || 'Desconocido'}, Message: ${errorMsg}`,
       };
     }
   }

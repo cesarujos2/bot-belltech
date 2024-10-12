@@ -13,7 +13,7 @@ export async function downloadWavFile(
   try {
     const dateMatch = fileName.match(/_(\d{8})_/);
     if (!dateMatch) {
-      throw new Error('No se pudo extraer la fecha del nombre del archivo');
+      throw new Error('SAVE WAV - No se pudo extraer la fecha del nombre del archivo');
     }
 
     const dateStr = dateMatch[1];
@@ -26,14 +26,14 @@ export async function downloadWavFile(
     try {
       await fs.mkdir(saveDir, { recursive: true });
     } catch (mkdirError: any) {
-      return { success: false, error: `Error al crear el directorio: ${mkdirError.message}` };
+      return { success: false, error: `SAVE WAV - Error al crear el directorio: ${mkdirError.message}` };
     }
 
     const savePath = path.join(saveDir, fileName);
 
     try {
       await fs.access(savePath);
-      return { success: false, error: 'El archivo ya existe en la ubicación' };
+      return { success: true, error: 'SAVE WAV - El archivo ya existe en la ubicación' };
     } catch {
       // Si no existe, continúa con la descarga y guardado
     }
@@ -48,14 +48,14 @@ export async function downloadWavFile(
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       if (error.response) {
-        return { success: false, error: `ERROR EN LA SOLICITUD A AVAYA - Descarga fallida: ${error.response.status} ${error.response.statusText} - AUDIO: ¨${url}` };
+        return { success: false, error: `SERVICES AVAYA - Descarga fallida: ${error.response.status} ${error.response.statusText} - AUDIO: ¨${url}` };
       } else if (error.request) {
-        return { success: false, error: 'ERROR EN LA SOLICITUD A AVAYA - No se recibió respuesta del servidor.' };
+        return { success: false, error: 'SERVICES AVAYA - No se recibió respuesta del servidor.' };
       } else {
-        return { success: false, error: `ERROR EN LA SOLICITUD A AVAYA- ${error.message}` };
+        return { success: false, error: `SERVICES AVAYA - ${error.message}` };
       }
     } else {
-      return { success: false, error: `ERROR - SAVE WAV - ${error instanceof Error ? error.message : 'Error desconocido'}` };
+      return { success: false, error: `ERROR SAVE WAV - ${error instanceof Error ? error.message : 'Error desconocido'}` };
     }
   }
 }
